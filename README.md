@@ -1,107 +1,76 @@
-# Notice
+# Laravel Component Polyfill
+ Laravel 5.8 or lower support
 
-We have abandoned this package because Laravel 7 introduced native support for Blade-X style components. 
+Languages: English | [Español](README.es.md)
 
-Only use this package if you're on Laravel 6 or below.
+# Benefits
+- You can use components as if you were on Laravel 8.x version from your old Laravel version
+  5.8, in situations where migrating your project is impossible.
+- You can feel confident to perform a migration later by simply removing this library and adopting the new
+  version of the Framework.
 
-When upgrading to Laravel 7 you should convert your Blade X components to native Laravel Blade components
+# Backstory
 
-# Supercharged Blade components
+Some time ago [Laravel Blade-X](https://spatie.be/docs/laravel-blade-x/v2/introduction) presented us with a proposal of
+components on steroids and after Laravel 7 adopted it officially into the Framework as [Blade Components]().
+as [Blade Components](https://laravel.com/docs/8.x/blade#components), however, this caused SPATIE to withdraw the support and also the namespaces of the
+support and also SPATIE namespaces differ from Laravel.
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-blade-x.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-blade-x)
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/spatie/laravel-blade-x/run-tests?label=tests)](https://github.com/spatie/laravel-blade-x/actions?query=workflow%3Arun-tests+branch%3Amaster)
-[![Quality Score](https://img.shields.io/scrutinizer/g/spatie/laravel-blade-x.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/laravel-blade-x)
-[![StyleCI](https://github.styleci.io/repos/150733020/shield?branch=master)](https://github.styleci.io/repos/150733020)
-[![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-blade-x.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-blade-x)
-
-This package provides an easy way to render custom HTML components in your Blade views.
-
-Here's an example. Instead of this
-
-```blade
-<h1>My view</h1>
-
-@include('myAlert', ['type' => 'error', 'message' => $message])
-```
-
-you can write this:
-
-```blade
-<h1>My view</h1>
-
-<my-alert type="error" :message="$message" />
-```
-
-You can place the content of that alert in a simple Blade view that needs to be [registered](https://docs.spatie.be/laravel-blade-x/v2/basic-usage/writing-your-first-component) before using the `my-alert` component.
-
-```blade
-{{-- resources/views/components/myAlert.blade.php --}}
-
-<div class="{{ $type }}">
-   {{ $message }}
-</div>
-```
+Therefore, I took it upon myself to create this polyfill to make sure the interfaces match and take advantage of the power of `Blade-X`.
+power of `Blade-X`.
 
 ## Installation
+
+### Requirements
+- PHP >= 7.0
 
 You can install the package via Composer:
 
 ```bash
-composer require spatie/laravel-blade-x
+composer require nekoos/laravel-components-polyfill
 ```
-
-The package will automatically register itself.
+This package will be registered automatically.
 
 ## Documentation
 
-You'll find the documentation on [https://docs.spatie.be/laravel-blade-x/v2/introduction](https://docs.spatie.be/laravel-blade-x/v2/introduction).
+See [Laravel Blade Components](https://laravel.com/docs/8.x/blade#components) for component usage information.
+components:   
 
-Find yourself stuck using the package? Found a bug? Do you have general questions or suggestions for improving the media library? Feel free to [create an issue on GitHub](https://github.com/spatie/laravel-blade-x/issues), we'll try to address it as soon as possible.
+```php
+<?php
 
-If you've found a bug regarding security please mail [freek@spatie.be](mailto:freek@spatie.be) instead of using the issue tracker.
+namespace App\View\Components;
 
-## Upgrading major versions
+use IlluminateViewComponent;
 
-Please see [UPGRADING](UPGRADING.md) for more information on how to upgrade from one major version to the other.
+class Alert extends Component
+{
+    public $type;
+    
+    public $message;
+    
+    public function __construct($type, $message)
+    {
+        $this->type = $type;
+        $this->message = $message;
+    }
 
-## Testing
-
-``` bash
-composer test
+    public function render()
+    {
+        return 'components.alert';
+    }
+}
 ```
 
-## Changelog
+```php
+<x-alert type="error" :message="$message"/>
+```
 
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
-
-## Contributing
-
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
-
-## Postcardware
-
-You're free to use this package, but if it makes it to your production environment we highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using.
-
-Our address is: Spatie, Samberstraat 69D, 2060 Antwerp, Belgium.
-
-We publish all received postcards [on our company website](https://spatie.be/en/opensource/postcards).
-
-## Credits
-
-- [Brent Roose](https://github.com/brendt)
-- [Alex Vanderbist](https://github.com/alexvanderbist)
-- [Ruben Van Assche](https://github.com/rubenvanassche)
-- [Sebastian De Deyne](https://github.com/sebdedeyne)
-- [Freek Van der Herten](https://github.com/freekmurze)
-- [All Contributors](../../contributors)
-
-## Support us
-
-Spatie is a webdesign agency based in Antwerp, Belgium. You'll find an overview of all our open source projects [on our website](https://spatie.be/opensource).
-
-Does your business depend on our contributions? Reach out and support us on [Patreon](https://www.patreon.com/spatie).
-All pledges will be dedicated to allocating workforce on maintenance and new awesome stuff.
+You will notice that the only significant change at the moment is the return of the `render` method, in Laravel this method returns a `View` instance and not the name of the `blade` file. 
+an instance of `View` and not the name of the `blade` file, however you can override the `view()` function to make it easier to use in the future.
+function to ease the migration to the updated version of the Framework in the future by installing this small plugin that 
+does the trick 
 
 ## License
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+The License MIT (MIT). Please see [License file](LICENSE.md) for more information.

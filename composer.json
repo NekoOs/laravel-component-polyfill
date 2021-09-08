@@ -1,6 +1,6 @@
 {
-    "name": "spatie/laravel-blade-x",
-    "description": "Supercharged Blade components",
+    "name": "nekoos/laravel-component-polyfill",
+    "description": "Support blade component for laravel legacy",
     "keywords": [
         "spatie",
         "blade",
@@ -9,8 +9,13 @@
         "laravel-blade-x"
     ],
     "homepage": "https://github.com/spatie/laravel-blade-x",
+    "type": "library",
     "license": "MIT",
     "authors": [
+        {
+            "name": "Neder Alfonso Fandiño Andrade",
+            "email": "neder.fandino@outlook.com"
+        },
         {
             "name": "Sebastian De Deyne",
             "email": "sebastian@spatie.be",
@@ -53,6 +58,7 @@
     },
     "autoload": {
         "psr-4": {
+            "Illuminate\\": "./src/Illuminate/",
             "Spatie\\BladeX\\": "src"
         }
     },
@@ -72,7 +78,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Spatie\\BladeX\\BladeXServiceProvider"
+                "\\Illuminate\\Providers\\BladeComponentPolyfill"
             ],
             "aliases": {
                 "BladeX": "Spatie\\BladeX\\Facades\\BladeX"
